@@ -1,25 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
-using System.Web.SessionState;
 using TestCustomControllers.Services;
 
 namespace TestCustomControllers.Controllers
 {
+    public class MyModel
+    {
+        public string FromForm { get; set; }
+    }
+
+    public class CustomModelBinder : IModelBinder
+    {
+        public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
+        {
+            var model = new MyModel { FromForm = "12121212" };
+            return model;
+        }
+    }
+
     public class HomeController : Controller
     {
         private readonly IService _service;
+        public HomeController()
+        {
+            //ActionInvoker = new MyCustomActionInvoker();
+        }
 
         public HomeController(IService service)
         {
             _service = service;
         }
-        public ActionResult Index()
+        public ActionResult Index(MyModel myModel)
         {
-            ViewBag.Text = _service.DoSomething();
+            var model = new MyModel();
+            UpdateModel(model);
             return View();
         }
 
@@ -38,34 +54,21 @@ namespace TestCustomControllers.Controllers
         }
     }
 
-    public class CustomControllerFactory : IControllerFactory
+    public class Custom2ControllerFactory: DefaultControllerFactory
     {
-        private readonly string _controllerNamespace = "TestCustomControllers.Controllers";
 
-        //public CustomControllerFactory(string controllerNamespace)
-        //{
-        //    _controllerNamespace = controllerNamespace;
-        //}
-        public IController CreateController(RequestContext requestContext, string controllerName)
-        {
-            var service = new Service();
-            Type controllerType = Type.GetType(string.Concat(_controllerNamespace, ".", controllerName, "Controller"));
-            IController controller = Activator.CreateInstance(controllerType, new[] { service }) as Controller;
-            return controller;
-        }
+    }
 
-        public SessionStateBehavior GetControllerSessionBehavior(RequestContext requestContext, string controllerName)
+    public class MyCustomActionInvoker : IActionInvoker
+    {
+        public bool InvokeAction(ControllerContext controllerContext, string actionName)
         {
-            return SessionStateBehavior.Default;
-        }
-
-        public void ReleaseController(IController controller)
-        {
-            var disposable = controller as IDisposable;
-            if (disposable != null)
+            if (actionName == "Index")
             {
-                disposable.Dispose();
+                controllerContext.HttpContext.Response.Write("Fuck yeah!!");
+                return true;
             }
+            return false;
         }
     }
 }

@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestEpiViewModel", "TestEpi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCustomControllers", "TestCustomControllers\TestCustomControllers.csproj", "{5FD4A905-1649-457C-BC85-C0BF2167C3F6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPopulateClassWithParamsInjected", "TestPopulateClassWithParamsInjected\TestPopulateClassWithParamsInjected.csproj", "{E5C42712-545C-467C-806A-6169561F3027}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Epi", "Epi", "{3ED6DAE1-9E90-4CAD-B85C-49D9751502FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,10 @@ Global
 		{5FD4A905-1649-457C-BC85-C0BF2167C3F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FD4A905-1649-457C-BC85-C0BF2167C3F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FD4A905-1649-457C-BC85-C0BF2167C3F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5C42712-545C-467C-806A-6169561F3027}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5C42712-545C-467C-806A-6169561F3027}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5C42712-545C-467C-806A-6169561F3027}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5C42712-545C-467C-806A-6169561F3027}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

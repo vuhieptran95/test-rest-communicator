@@ -10,4 +10,15 @@ namespace TestCustomControllers
             filters.Add(new HandleErrorAttribute());
         }
     }
+
+    public class CustomActionFilter : IActionFilter
+    {
+        public void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+        }
+
+        public void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+        }
+    }
 }

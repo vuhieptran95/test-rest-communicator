@@ -19,6 +19,8 @@ namespace TestCustomControllers
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             ControllerBuilder.Current.SetControllerFactory(typeof(CustomControllerFactory));
+
+            ModelBinders.Binders.Add(typeof(MyModel), new CustomModelBinder());
         }
     }
 }
