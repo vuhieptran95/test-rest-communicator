@@ -37,7 +37,7 @@ namespace TestSite.Controllers
                 new KeyValuePair<string, string>("countryheader", "AUS"),
                 new KeyValuePair<string, string>("Content-Type", "application/json")
             };
-            var response =  service.GetTechnicianAvailibility(endpoint, request, headers).GetAwaiter().GetResult();
+            var response = await service.GetTechnicianAvailibility(endpoint, request, headers);
 
             return View(currentPage);
         }

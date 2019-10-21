@@ -27,9 +27,9 @@ namespace TestSite.Services.InstaEdge
             _restCommunicator = restCommunicator;
         }
 
-        public async Task<UnifiedResponse> GetTechnicianAvailibility(string endpoint, TechnicianAvailibilityRequest request, IEnumerable<KeyValuePair<string, string>> headers)
+        public async Task<UnifiedResponse<TechnicianAvailibilityResponse, ErrorResponse>> GetTechnicianAvailibility(string endpoint, TechnicianAvailibilityRequest request, IEnumerable<KeyValuePair<string, string>> headers)
         {
-            var response = await _restCommunicator.Post<TechnicianAvailibilityResponse>(
+            var response = await _restCommunicator.Post<TechnicianAvailibilityResponse, ErrorResponse>(
                 endpoint,
                 request,
                 headers
@@ -44,54 +44,84 @@ namespace TestSite.Services.InstaEdge
     /// </summary>
     public interface IRestCommunicator
     {
-        Task<UnifiedResponse> Post<T>(string url, object data, IEnumerable<KeyValuePair<string, string>> headers) where T : RestResponse;
+        Task<UnifiedResponse<R, E>> Post<R, E>(string url, object data, IEnumerable<KeyValuePair<string, string>> headers) 
+            where R : RestResponse
+            where E : ErrorResponse;
     }
 
     public class RestCommunicator : IRestCommunicator
     {
         private readonly ILogger _logger = LogManager.GetLogger();
-        
-        public async Task<UnifiedResponse> Post<T>(string url, object data, IEnumerable<KeyValuePair<string, string>> headers) where T : RestResponse
+
+        public async Task<UnifiedResponse<R, E>> Post<R, E>(string url, object data, IEnumerable<KeyValuePair<string, string>> headers) 
+            where R : RestResponse
+            where E: ErrorResponse
         {
-            var unifiedResponse = new UnifiedResponse();
+            var unifiedResponse = new UnifiedResponse<R, E>();
+            dynamic rawResponse = null;
             try
             {
                 var request = url.WithHeaders(headers);
+
                 var dataSerialized = JsonConvert.SerializeObject(data, new JsonSerializerSettings
                 {
                     ContractResolver = new DefaultContractResolver { NamingStrategy = new CamelCaseNamingStrategy() },
                     Formatting = Formatting.Indented
                 });
                 //var request = url.WithHeader("apikey", "46f7-6db8-50ebcd876472").WithHeader("countryheader", "AUS").WithHeader("Content-Type", "application/json");
-                var correctResponses = await request.PostStringAsync(dataSerialized).ReceiveJson<IEnumerable<T>>();
-                IEnumerable<ErrorResponse> errorResponses = null;
 
-                if (correctResponses == null)
+                rawResponse = await request.PostStringAsync(dataSerialized).ReceiveString();
+
+                if (typeof(IExpectedArrayResponse).IsAssignableFrom(typeof(R)))
                 {
-                    errorResponses = await request.PostJsonAsync(data).ReceiveJson<IEnumerable<ErrorResponse>>();
-                    throw new BusinessException() { BusinessErrors = errorResponses };
+                    IEnumerable<E> errorResponses = JsonConvert.DeserializeObject<IEnumerable<E>>(rawResponse);
+
+                    if (errorResponses != null && errorResponses.Count() > 0 && errorResponses.FirstOrDefault()?.ErrorCode != null)
+                    {
+                        throw new BusinessException<E>() { BusinessError = errorResponses.FirstOrDefault() };
+                    }
+
+                    IEnumerable<R> objectResponses = JsonConvert.DeserializeObject<IEnumerable<R>>(rawResponse);
+
+                    if (objectResponses != null && objectResponses.Count() > 1)
+                    {
+                        unifiedResponse.Response = objectResponses?.FirstOrDefault();
+                    }
+                }
+                else
+                {
+                    R objectResponse = JsonConvert.DeserializeObject<R>(rawResponse);
+                    if (objectResponse == null)
+                    {
+                        E errorResponse = JsonConvert.DeserializeObject<E>(rawResponse);
+                        throw new BusinessException<E>() { BusinessError = errorResponse };
+                    }
+                    unifiedResponse.Response = objectResponse;
                 }
 
-                unifiedResponse.Responses = correctResponses;
             }
-            catch (BusinessException ex)
+            catch (BusinessException<E> ex)
             {
-                _logger.Error("BusinessRestException: {0} - Error info: {1}", ex.Message, JsonConvert.SerializeObject(ex.BusinessErrors));
-                unifiedResponse.Errors = ex.BusinessErrors;
+                _logger.Error("BusinessRestException: {0} - Error info: {1} - Raw response: {2}", 
+                    ex.Message, 
+                    JsonConvert.SerializeObject(ex.BusinessError),
+                    rawResponse as string);
+                unifiedResponse.BusinessError = ex.BusinessError;
             }
             catch (FlurlHttpException ex)
             {
                 var error = await ex.GetResponseStringAsync();
-                _logger.Error("FlurlHttpException: {0} - Error info: {1}", ex.Message, error);
+                _logger.Error("FlurlHttpException: {0} - Error info: {1} - Raw response: {2}", ex.Message, error, rawResponse as string);
+                unifiedResponse.Exception = ex;
             }
-            //catch(Exception ex)
-            //{
-            //    _logger.Error(ex.Message, ex);
-            //    throw;
-            //}
+            catch (Exception ex)
+            {
+                _logger.Error("Raw Response: {0}", rawResponse as string);
+                _logger.Error(ex.Message, ex);
+                unifiedResponse.Exception = ex;
+            }
 
             return unifiedResponse;
-
         }
     }
 }

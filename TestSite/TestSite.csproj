@@ -235,8 +235,11 @@
     <Compile Include="RestMessages\Models\CustomerDetails.cs" />
     <Compile Include="RestMessages\Models\ProductDetails.cs" />
     <Compile Include="RestMessages\Models\ServiceOrderDetails.cs" />
+    <Compile Include="RestMessages\RestHelper.cs" />
+    <Compile Include="RestMessages\RestResponse.cs" />
     <Compile Include="RestMessages\TechnicianAvailibilityRequest.cs" />
     <Compile Include="RestMessages\TechnicianAvailibilityResponse.cs" />
+    <Compile Include="RestMessages\UnifiedResponse.cs" />
     <Compile Include="Services\InstaEdge\InstaEdgeDataService.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -2,17 +2,18 @@
 
 namespace TestSite.RestMessages
 {
-    public abstract class RestResponse
-    {
-
-    }
 
     public abstract class RestRequest
     {
 
     }
 
-    public class TechnicianAvailibilityResponse : RestResponse
+    public interface IExpectedArrayResponse
+    {
+
+    }
+
+    public class TechnicianAvailibilityResponse : RestResponse, IExpectedArrayResponse
     {
         public string Status { get; set; }
         public object Description { get; set; }

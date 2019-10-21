@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPopulateClassWithParams
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Epi", "Epi", "{3ED6DAE1-9E90-4CAD-B85C-49D9751502FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSite", "TestSite\TestSite.csproj", "{7D4B1AF6-DA9A-494C-88D1-F97DBFC16FBF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRestClient", "TestRestClient\TestRestClient.csproj", "{FD4D7957-FC38-4F62-A285-3F1AF8CDAC0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,9 +51,21 @@ Global
 		{E5C42712-545C-467C-806A-6169561F3027}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5C42712-545C-467C-806A-6169561F3027}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5C42712-545C-467C-806A-6169561F3027}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D4B1AF6-DA9A-494C-88D1-F97DBFC16FBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D4B1AF6-DA9A-494C-88D1-F97DBFC16FBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D4B1AF6-DA9A-494C-88D1-F97DBFC16FBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D4B1AF6-DA9A-494C-88D1-F97DBFC16FBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD4D7957-FC38-4F62-A285-3F1AF8CDAC0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD4D7957-FC38-4F62-A285-3F1AF8CDAC0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD4D7957-FC38-4F62-A285-3F1AF8CDAC0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD4D7957-FC38-4F62-A285-3F1AF8CDAC0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7D4B1AF6-DA9A-494C-88D1-F97DBFC16FBF} = {3ED6DAE1-9E90-4CAD-B85C-49D9751502FC}
+		{FD4D7957-FC38-4F62-A285-3F1AF8CDAC0B} = {3ED6DAE1-9E90-4CAD-B85C-49D9751502FC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63CB3F82-4613-4E4B-875C-C3037961C3B4}

@@ -6,12 +6,12 @@ using TestSite.RestMessages;
 
 namespace TestSite.Exceptions.BusinessExceptions
 {
-    public class BusinessException : Exception
+    public class BusinessException<E> : Exception where E: ErrorResponse
     {
         public BusinessException(string message = "Business exception") : base(message)
         {
 
         }
-        public IEnumerable<BusinessError> BusinessErrors { get; set; }
+        public E BusinessError { get; set; }
     }
 }
